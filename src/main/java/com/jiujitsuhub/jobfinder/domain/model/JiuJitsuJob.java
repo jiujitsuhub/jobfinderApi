@@ -29,6 +29,8 @@ public class JiuJitsuJob {
     private LocalDate endingDate;
     @Enumerated(EnumType.STRING)
     private PublishedStatus publishedStatus;
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
     @Embedded
     private Payment payment;
 

@@ -31,7 +31,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobArray'          
+                $ref: '#/components/schemas/JobArray'
         '400':
           description: Invalid ID supplied
         '404':
@@ -47,7 +47,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Job'
+              $ref: '#/components/schemas/JobDTO'
           
         required: true
       responses:
@@ -56,10 +56,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Job'          
+                $ref: '#/components/schemas/JobDTO'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Job'
+                $ref: '#/components/schemas/JobDTO'
         '400':
           description: Invalid ID supplied
         '404':
@@ -78,7 +78,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Job'
+              $ref: '#/components/schemas/JobDTO'
         
         required: true
       responses:
@@ -87,10 +87,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Job'          
+                $ref: '#/components/schemas/JobDTO'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Job'
+                $ref: '#/components/schemas/JobDTO'
         '405':
           description: Invalid input
      
@@ -117,7 +117,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Job'          
+                $ref: '#/components/schemas/JobDTO'
         '400':
           description: Invalid ID supplied
         '404':
@@ -127,7 +127,7 @@ paths:
 components:
   schemas:
     
-    Job:
+    JobDTO:
       type: object
       properties:
         id:
@@ -136,19 +136,31 @@ components:
           example: 10
         title:
           type: string
-          example: Jiu Jitsu instructor in Ukraine
+          example: Jiu Jitsu instructor in Amsterdam
+        paymentAmount:
+          type: number
+          description: Amount expressed as a decimal number of major currency units
+          format: decimal
+          example: 99.95
+        currency:
+          type: string
+          format: iso-4217
+          example: EUR
+        paymentType:
+          type: string
+          enum: [MONTHLY, ONE_TIME, OTHER]
         description:
           type: string
-          example: John
-        creator:
-          type: string
-          example: James
-    
-  
+          example: Our martial arts studio is seeking a Jiu Jitsu Instructor to join our team. The successful candidate will be responsible for
+        startingDate:
+          type: date
+        endingDate:
+          type: date
+
     
     JobArray:
       description: List of job object
       type: array
       items:
-        $ref: '#/components/schemas/Job'
+        $ref: '#/components/schemas/JobDTO'
         
