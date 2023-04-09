@@ -39,6 +39,8 @@ paths:
 
 
     post:
+      security:
+        - bearerAuth: []
       tags:
         - jobs
 
@@ -72,6 +74,8 @@ paths:
     put:
       tags:
         - jobs
+      security:
+        - bearerAuth: []
 
       summary: Update an existing job
       description: Update an existing job by Id
@@ -136,6 +140,11 @@ paths:
 
 
 components:
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
   schemas:
 
