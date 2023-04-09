@@ -137,15 +137,15 @@
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/jiujitsujobfinder.yaml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>com.jiujitsuhub.api</apiPackage>
-                            <modelPackage>com.jiujitsuhub.model</modelPackage>
+                            <apiPackage>com.jiujitsuhub.jobfinder.api</apiPackage>
+                            <modelPackage>com.jiujitsuhub.jobfinder.api.model</modelPackage>
                             <supportingFilesToGenerate>
                                 ApiUtil.java
                             </supportingFilesToGenerate>
                             <configOptions>
-                                <!--                                <additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor-->
-                                <!--                                    @lombok.AllArgsConstructor-->
-                                <!--                                </additionalModelTypeAnnotations>-->
+                                <additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor
+                                    @lombok.AllArgsConstructor
+                                </additionalModelTypeAnnotations>
                                 <delegatePattern>true</delegatePattern>
                             </configOptions>
                         </configuration>

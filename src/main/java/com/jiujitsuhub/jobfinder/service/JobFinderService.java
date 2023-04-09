@@ -1,9 +1,9 @@
 package com.jiujitsuhub.jobfinder.service;
 
-import com.jiujitsuhub.api.JobsApiDelegate;
+import com.jiujitsuhub.jobfinder.api.JobsApiDelegate;
+import com.jiujitsuhub.jobfinder.api.model.JobDTO;
 import com.jiujitsuhub.jobfinder.domain.model.JiuJitsuJob;
 import com.jiujitsuhub.jobfinder.repository.JobRepository;
-import com.jiujitsuhub.model.JobDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
