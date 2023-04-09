@@ -16,12 +16,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 
 public class Payment {
-    private int amount;
+    private BigDecimal amount;
     private PaymentType type;
-
-    public BigDecimal getAmountInEuros() {
-        return BigDecimal.valueOf(this.getAmount());
-    }
-
 
 }
