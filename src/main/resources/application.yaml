@@ -1,4 +1,9 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://spots-app.eu.auth0.com/
   h2:
     console:
       enabled: true
@@ -10,3 +15,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+auth0:
+  audience: 'http:localhost:8080'

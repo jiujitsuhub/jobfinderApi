@@ -6,25 +6,25 @@ info:
   contact:
     email: evangelos.vatikiotis@outlook.com
   license:
-    name: AGPL 
+    name: AGPL
     url: https://www.gnu.org/licenses/agpl-3.0.en.html
   version: "3.0"
 
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8080/api
 tags:
-  - name: jobs 
+  - name: jobs
     description: Create and find for Jobs related to Jiu Jitsu
-  
+
 paths:
   /jobs:
     get:
       tags:
         - jobs
-      summary: Get all jobs 
+      summary: Get all jobs
       description: Returns a single job
       operationId: getAll
-    
+
       responses:
         '200':
           description: successful operation
@@ -36,19 +36,61 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Job not found
+
+
+    post:
+      tags:
+        - jobs
+
+      summary: Create a new job
+      description: Create a new job
+      operationId: createJob
+      requestBody:
+        description: Create a new job
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobDTO'
+
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobDTO'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/JobDTO'
+        '405':
+          description: Invalid input
+
+
+
+  /jobs/{id}:
     put:
       tags:
         - jobs
+
       summary: Update an existing job
       description: Update an existing job by Id
       operationId: updateJob
+      parameters:
+        - name: id
+          in: path
+          description: ID of job to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         description: Update an existent job in the store
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/JobDTO'
-          
+
         required: true
       responses:
         '200':
@@ -66,37 +108,6 @@ paths:
           description: Job not found
         '405':
           description: Validation exception
-    
-    post:
-      tags:
-        - jobs
-      summary: Create a new job 
-      description: Create a new job
-      operationId: createJob
-      requestBody:
-        description: Create a new job 
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/JobDTO'
-        
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/JobDTO'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/JobDTO'
-        '405':
-          description: Invalid input
-     
-  
-  
-  /jobs/{id}:
     get:
       tags:
         - jobs
@@ -122,11 +133,12 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Job not found
-  
- 
+
+
 components:
+
   schemas:
-    
+
     JobDTO:
       type: object
       properties:
@@ -153,9 +165,11 @@ components:
           type: string
           example: Our martial arts studio is seeking a Jiu Jitsu Instructor to join our team. The successful candidate will be responsible for
         startingDate:
-          type: date
+          type: string
+          format: date
         endingDate:
-          type: date
+          type: string
+          format: date
 
     
     JobArray:
