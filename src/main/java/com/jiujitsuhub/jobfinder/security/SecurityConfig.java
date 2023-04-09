@@ -31,7 +31,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests()
 
-                .requestMatchers(HttpMethod.GET, "/jobs/{id}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/jobs/{id}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/jobs").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/jobs").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/jobs/{id}").authenticated()
