@@ -12,6 +12,7 @@ public interface JiuJitsuJobMapper {
     @Mapping(source = "payment.type", target = "paymentType")
     JobDTO toDTO(JiuJitsuJob jiuJitsuJob);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "paymentAmount", target = "payment.amount")
     @Mapping(source = "paymentType", target = "payment.type")
     JiuJitsuJob toDAO(JobDTO userDTO);

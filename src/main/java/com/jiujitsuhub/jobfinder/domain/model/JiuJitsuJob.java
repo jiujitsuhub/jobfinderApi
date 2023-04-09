@@ -1,10 +1,7 @@
 package com.jiujitsuhub.jobfinder.domain.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -17,7 +14,7 @@ import java.time.LocalDate;
 public class JiuJitsuJob {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @Setter(AccessLevel.NONE)
     private Long id;
     @Column(nullable = false)
     private String title;
