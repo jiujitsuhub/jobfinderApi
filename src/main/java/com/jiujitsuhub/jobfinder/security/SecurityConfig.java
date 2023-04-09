@@ -2,6 +2,7 @@ package com.jiujitsuhub.jobfinder.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
+@Configuration
 public class SecurityConfig {
 
     @Value("${auth0.audience}")
@@ -25,6 +27,8 @@ public class SecurityConfig {
         This is where we configure the security required for our endpoints and setup our app to serve as
         an OAuth2 Resource Server, using JWT validation.
         */
+
+
         http.authorizeHttpRequests()
 
                 .requestMatchers(HttpMethod.GET, "/jobs/{id}").permitAll()
@@ -32,9 +36,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/jobs").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/jobs/{id}").authenticated()
                 .requestMatchers("/actuator/**").permitAll()
-                .requestMatchers("/actuator").permitAll()
-                .requestMatchers("/api/private").authenticated()
-                .requestMatchers("/private-scoped").hasAuthority("SCOPE_read:messages")
+//                .requestMatchers("/private-scoped").hasAuthority("SCOPE_read:messages")
                 .and().cors()
                 .and().oauth2ResourceServer().jwt();
         return http.build();

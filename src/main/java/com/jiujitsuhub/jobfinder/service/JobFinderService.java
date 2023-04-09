@@ -26,6 +26,7 @@ public class JobFinderService implements JobsApiDelegate {
                 .stream()
                 .map(jiuJitsuJob -> JobDTO
                         .builder()
+                        .id(jiuJitsuJob.getId())
                         .title(jiuJitsuJob.getTitle())
                         .build())
                 .collect(Collectors.toList()));
