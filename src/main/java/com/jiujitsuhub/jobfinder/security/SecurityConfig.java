@@ -27,16 +27,16 @@ public class SecurityConfig {
         */
         http.authorizeHttpRequests()
 
-                .requestMatchers(HttpMethod.GET, "/api/jobs/{id}").permitAll()
-                .requestMatchers(HttpMethod.POST, "/jobs").authenticated()
+                .requestMatchers(HttpMethod.GET, "/jobs/{id}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/jobs").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/jobs/{id}").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/jobs").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/jobs/{id}").authenticated()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/actuator").permitAll()
                 .requestMatchers("/api/private").authenticated()
                 .requestMatchers("/private-scoped").hasAuthority("SCOPE_read:messages")
-                .and().cors();
-//                .and().oauth2ResourceServer().jwt();
+                .and().cors()
+                .and().oauth2ResourceServer().jwt();
         return http.build();
     }
 
