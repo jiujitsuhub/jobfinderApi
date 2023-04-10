@@ -18,6 +18,8 @@ public class JiuJitsuJob {
     private Long id;
     @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
+    private UserReference creator;
     private String description;
     private String legalObligations;
     @Column(columnDefinition = "DATE")

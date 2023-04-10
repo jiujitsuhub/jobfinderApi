@@ -3,6 +3,7 @@ package com.jiujitsuhub.jobfinder.mappers;
 
 import com.jiujitsuhub.jobfinder.api.model.JobDTO;
 import com.jiujitsuhub.jobfinder.domain.model.JiuJitsuJob;
+import com.jiujitsuhub.jobfinder.domain.model.UserReference;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -10,10 +11,12 @@ import org.mapstruct.Mapping;
 public interface JiuJitsuJobMapper {
     @Mapping(source = "payment.amount", target = "paymentAmount")
     @Mapping(source = "payment.type", target = "paymentType")
+    @Mapping(source = "creator.userId", target = "creator")
     JobDTO toDTO(JiuJitsuJob jiuJitsuJob);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "paymentAmount", target = "payment.amount")
-    @Mapping(source = "paymentType", target = "payment.type")
-    JiuJitsuJob toDAO(JobDTO userDTO);
+    @Mapping(source = "userDTO.paymentAmount", target = "payment.amount")
+    @Mapping(source = "userDTO.paymentType", target = "payment.type")
+    @Mapping(source = "userReference.userId", target = "creator.userId")
+    JiuJitsuJob toDAO(JobDTO userDTO, UserReference userReference);
 }

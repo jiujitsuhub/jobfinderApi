@@ -155,6 +155,8 @@ components:
           type: integer
           format: int64
           example: 10
+        creator:
+          type: string
         title:
           type: string
           example: Jiu Jitsu instructor in Amsterdam
