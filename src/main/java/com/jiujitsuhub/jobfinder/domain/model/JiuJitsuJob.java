@@ -10,11 +10,11 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @Getter
-
+@Setter
 public class JiuJitsuJob {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
+//    @Setter(AccessLevel.NONE)
     private Long id;
     @Column(nullable = false)
     private String title;
