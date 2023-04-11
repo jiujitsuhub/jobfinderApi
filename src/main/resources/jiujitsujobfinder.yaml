@@ -52,7 +52,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JobDTO'
+              $ref: '#/components/schemas/jobDTO'
 
         required: true
       responses:
@@ -61,10 +61,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobDTO'
+                $ref: '#/components/schemas/jobDTO'
             application/xml:
               schema:
-                $ref: '#/components/schemas/JobDTO'
+                $ref: '#/components/schemas/jobDTO'
         '405':
           description: Invalid input
 
@@ -93,7 +93,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/JobDTO'
+              $ref: '#/components/schemas/jobDTO'
 
         required: true
       responses:
@@ -102,10 +102,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobDTO'
+                $ref: '#/components/schemas/jobDTO'
             application/xml:
               schema:
-                $ref: '#/components/schemas/JobDTO'
+                $ref: '#/components/schemas/jobDTO'
         '400':
           description: Invalid ID supplied
         '404':
@@ -116,7 +116,7 @@ paths:
       tags:
         - jobs
       summary: Find job by ID
-      description: Returns a single jobb
+      description: Returns a single job
       operationId: findJobById
       parameters:
         - name: id
@@ -132,7 +132,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JobDTO'
+                $ref: '#/components/schemas/jobDTO'
         '400':
           description: Invalid ID supplied
         '404':
@@ -148,15 +148,23 @@ components:
 
   schemas:
 
-    JobDTO:
+    jobDTO:
       type: object
       properties:
         id:
           type: integer
           format: int64
           example: 10
-        creator:
-          type: string
+        publishedStatus:
+          format: iso-4217
+          type: String
+          example: PUBLISHED
+        jobDetails:
+          type: object
+          '$ref': '#/components/schemas/jobDetailsDTO'
+    jobDetailsDTO:
+      type: object
+      properties:
         title:
           type: string
           example: Jiu Jitsu instructor in Amsterdam
@@ -182,10 +190,11 @@ components:
           type: string
           format: date
 
-    
+
+
     JobArray:
       description: List of job object
       type: array
       items:
-        $ref: '#/components/schemas/JobDTO'
+        $ref: '#/components/schemas/jobDTO'
         

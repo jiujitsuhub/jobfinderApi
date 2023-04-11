@@ -3,9 +3,10 @@ package com.jiujitsuhub.jobfinder.service;
 import com.jiujitsuhub.jobfinder.api.JobsApiDelegate;
 import com.jiujitsuhub.jobfinder.api.model.JobDTO;
 import com.jiujitsuhub.jobfinder.domain.model.JiuJitsuJob;
+import com.jiujitsuhub.jobfinder.domain.model.PublishedStatus;
 import com.jiujitsuhub.jobfinder.domain.model.UserReference;
 import com.jiujitsuhub.jobfinder.exception.JobNotFoundException;
-import com.jiujitsuhub.jobfinder.mappers.JiuJitsuJobMapper;
+import com.jiujitsuhub.jobfinder.mappers.JobDetailsMapper;
 import com.jiujitsuhub.jobfinder.repository.JobRepository;
 import com.jiujitsuhub.jobfinder.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,13 @@ import java.util.stream.Collectors;
 public class JobCrudService implements JobsApiDelegate {
 
     private final JobRepository jobRepository;
-    private final JiuJitsuJobMapper jiuJitsuJobMapper;
+    private final JobDetailsMapper jobDetailsMapper;
     private final JwtDecoder jwtDecoder;
 
     @Autowired
-    public JobCrudService(JobRepository jobRepository, JiuJitsuJobMapper jiuJitsuJobMapper, JwtDecoder jwtDecoder) {
+    public JobCrudService(JobRepository jobRepository, JobDetailsMapper jobDetailsMapper, JwtDecoder jwtDecoder) {
         this.jobRepository = jobRepository;
-        this.jiuJitsuJobMapper = jiuJitsuJobMapper;
+        this.jobDetailsMapper = jobDetailsMapper;
         this.jwtDecoder = jwtDecoder;
     }
 
@@ -35,7 +36,11 @@ public class JobCrudService implements JobsApiDelegate {
         return ResponseEntity.ok(jobRepository
                 .findAll()
                 .stream()
-                .map(jiuJitsuJobMapper::toDTO)
+                .map(job -> JobDTO
+                        .builder()
+                        .id(job.getId())
+                        .jobDetails(jobDetailsMapper.toDTO(job.getDetails()))
+                        .build())
                 .collect(Collectors.toList()));
     }
 
@@ -43,7 +48,11 @@ public class JobCrudService implements JobsApiDelegate {
     public ResponseEntity<JobDTO> findJobById(Long id) {
         return ResponseEntity.ok(jobRepository
                 .findById(id)
-                .map(jiuJitsuJobMapper::toDTO)
+                .map(job -> JobDTO
+                        .builder()
+                        .id(job.getId())
+                        .jobDetails(jobDetailsMapper.toDTO(job.getDetails()))
+                        .build())
                 .orElseThrow(() -> new JobNotFoundException(String.format("Job with id %s was not found", id))));
     }
 
@@ -53,21 +62,34 @@ public class JobCrudService implements JobsApiDelegate {
                 .decode(JwtUtils.getJwt(JwtUtils.getCurrentRequest()))
                 .getClaims()
                 .get("sub");
-        JiuJitsuJob jiuJitsuJob =
-                jobRepository
-                        .save(jiuJitsuJobMapper.toDAO(jobDTO, new UserReference(userID)));
-        return ResponseEntity.ok(jiuJitsuJobMapper.toDTO(jiuJitsuJob));
+        JiuJitsuJob jiuJitsuJob = JiuJitsuJob
+                .builder().publishedStatus(PublishedStatus.UNPUBLISHED)
+                .creator(new UserReference(userID))
+                .details(jobDetailsMapper.toDAO(jobDTO.getJobDetails()))
+                .build();
+        jobRepository
+                .save(jiuJitsuJob);
+        return ResponseEntity.ok(
+                JobDTO
+                        .builder()
+                        .id(jiuJitsuJob.getId())
+                        .jobDetails(jobDetailsMapper.toDTO(jiuJitsuJob.getDetails()))
+                        .build());
     }
 
     @Override
     public ResponseEntity<JobDTO> updateJob(Long id, JobDTO jobDTO) {
-        JiuJitsuJob oldJobVersion = jobRepository
+        JiuJitsuJob job = jobRepository
                 .findById(id)
                 .orElseThrow(() -> new JobNotFoundException(String.format("Job with id %s was not found", id)));
-        JiuJitsuJob newVersion = jiuJitsuJobMapper.toDAO(jobDTO);
-        JiuJitsuJob updatedJob = jiuJitsuJobMapper.updateJob(oldJobVersion, newVersion);
-        jobRepository.save(updatedJob);
-        return ResponseEntity.ok(jiuJitsuJobMapper.toDTO(updatedJob));
+        job.setDetails(jobDetailsMapper.toDAO(jobDTO.getJobDetails()));
+        jobRepository.save(job);
+        return ResponseEntity.ok(
+                JobDTO
+                        .builder()
+                        .id(job.getId())
+                        .jobDetails(jobDetailsMapper.toDTO(job.getDetails()))
+                        .build());
 
     }
 }
