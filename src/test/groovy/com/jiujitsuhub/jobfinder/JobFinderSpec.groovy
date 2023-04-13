@@ -1,3 +1,4 @@
+import com.jiujitsuhub.jobfinder.HttpFactory
 import com.jiujitsuhub.jobfinder.JobfinderApplication
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -14,11 +15,9 @@ class JobFinderSpec extends Specification {
     private int port
 
 
-    def "when context is loaded then all expected beans are created"() {
+    def "when health point is called status returned is up"() {
         when:
         HttpClient client = HttpClient.newHttpClient();
-
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:${port}/actuator/health"))
                 .timeout(Duration.ofSeconds(2))
@@ -29,4 +28,29 @@ class JobFinderSpec extends Specification {
         then:
         response.body().contains("UP")
     }
+
+
+    def "public endpoints are available"() {
+        when:
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> response = client
+                .send(HttpFactory.createGetRequest("/api/jobs", port),
+                        HttpResponse.BodyHandlers.ofString());
+        then:
+        response.statusCode() == 200
+        response.body() == "[]"
+    }
+
+    def "private endpoints are forbidden"() {
+        when:
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> response = client
+                .send(HttpFactory.createpostRequest("/api/jobs", port, "{}"),
+                        HttpResponse.BodyHandlers.ofString());
+        then:
+        response.statusCode() == 401
+    }
+
 }
